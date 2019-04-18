@@ -5,9 +5,9 @@ const Friends = (props) => {
     <>
     <form onSubmit={props.addFriend}>
     <h2>Friends List</h2>
-    <input type="text" name="name" placeholder="Name"/>
-    <input type="number" name="age" placeholder="Age"/>
-    <input type="email" name="email" placeholder="E-Mail"/>
+    <input type="text" name="name" onChange={props.changer} value={props.name} placeholder="Name"/>
+    <input type="number" name="age" onChange={props.changer} value={props.age} placeholder="Age"/>
+    <input type="email" name="email" onChange={props.changer} value={props.email} placeholder="E-Mail"/>
     </form>
     {props.friends.map(cur => {
       return (
