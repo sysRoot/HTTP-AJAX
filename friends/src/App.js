@@ -28,7 +28,7 @@ class App extends Component {
   addFriendHandler = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:5000", {
+      .post("http://localhost:5000/friends", {
         name: this.state.name,
         age: this.state.age,
         email: this.state.email
@@ -36,11 +36,14 @@ class App extends Component {
       .then(res =>
         this.setState(prevState => {
           return {
-            friends: [...prevState.friends, res.data]
+            friends: res.data
           };
         })
       )
       .catch(err => console.log(err, `add friend hiccup`));
+        //Blank state for next input
+      this.setState({ name: ``, age: ``, email: `` });
+
   }
   changeHandler = (event) => {
     this.setState({
