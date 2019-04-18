@@ -28,7 +28,7 @@ class App extends Component {
   addFriendHandler = (event) => {
     event.preventDefault();
     axios
-      .post("http://localhost:3333", {
+      .post("http://localhost:5000", {
         name: this.state.name,
         age: this.state.age,
         email: this.state.email
