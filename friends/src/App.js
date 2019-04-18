@@ -20,6 +20,11 @@ class App extends Component {
       .catch(err => console.log(err))
   }
 
+  addFriendHandler() {
+    axios.post('http://localhost:3333')
+      .then(res => this.setState)
+      .catch()
+  }
   render() {
     return (
       <div className="App">
