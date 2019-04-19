@@ -9,7 +9,8 @@ class Friends extends Component {
       name: ``,
       age: null,
       email: ``,
-
+      id: null,
+      editing: false
     };
   }
 
@@ -29,7 +30,7 @@ class Friends extends Component {
       .post("http://localhost:5000/friends", {
         name: this.state.name,
         age: parseInt(this.state.age),
-        email: this.state.email,
+        email: this.state.email
       })
       .then(res =>
         this.setState(prevState => {
@@ -54,7 +55,11 @@ class Friends extends Component {
         this.setState({ friends: res.data });
       })
       .catch(err => console.log(err));
-    this.setState({ name: ``, age: null, email: `` });
+    this.setState({ editing: false, name: ``, age: null, email: `` });
+  };
+
+  setEditHandler = (event, ids) => {
+    this.setState({ editing: true, id: ids, name: "", age: "", email: "" });
   };
 
   changeHandler = event => {
@@ -63,77 +68,80 @@ class Friends extends Component {
     });
   };
 
-  editHandler = (event) => {
-
+  editHandler = (event, ids) => {
+    this.setState({ editing: true, id: ids, name: "", age: "", email: "" });
   };
 
   render() {
-    const view = {};
-    const edit = {};
-    
     return (
       <>
-        <h2>Friends List</h2>
-        <form action="submit" onSubmit={this.addFriendHandler}>
-          <input
-            type="text"
-            name="name"
-            onChange={this.changeHandler}
-            value={this.props.name}
-            placeholder="Name"
-          />
-          <input
-            type="number"
-            name="age"
-            onChange={this.changeHandler}
-            value={this.props.age}
-            placeholder="Age"
-          />
-          <input
-            type="email"
-            name="email"
-            onChange={this.changeHandler}
-            value={this.props.email}
-            placeholder="E-Mail"
-          />
-          <button type="submit">Add Friend</button>
-        </form>
-        {this.state.friends.map(cur => {
-          return (
-            <>
+        <h1>Friends List</h1>
+        <h4>Double-click a friend to edit</h4>
+        {!this.state.editing && (
+          <form action="submit" onSubmit={this.addFriendHandler}>
+            <input
+              type="text"
+              name="name"
+              onChange={this.changeHandler}
+              value={this.props.name}
+              placeholder="Name"
+            />
+            <input
+              type="number"
+              name="age"
+              onChange={this.changeHandler}
+              value={this.props.age}
+              placeholder="Age"
+            />
+            <input
+              type="email"
+              name="email"
+              onChange={this.changeHandler}
+              value={this.props.email}
+              placeholder="E-Mail"
+            />
+            <button type="submit">Add Friend</button>
+          </form>
+        )}
+        {this.state.editing && (
+          <form action="submit" onSubmit={this.updateFriendHandler}>
+            <input
+              type="text"
+              name="name"
+              onChange={this.changeHandler}
+              value={this.props.name}
+              placeholder="Name"
+            />
+            <input
+              type="number"
+              name="age"
+              onChange={this.changeHandler}
+              value={this.props.age}
+              placeholder="Age"
+            />
+            <input
+              type="email"
+              name="email"
+              onChange={this.changeHandler}
+              value={this.props.email}
+              placeholder="E-Mail"
+            />
+            <button type="submit">Update</button>
+          </form>
+        )}
+        {this.state.friends &&
+          this.state.friends.map(cur => {
+            return (
               <div
                 key={cur.id}
-                onDoubleClick={this.editHandler}
-                style={view}
+                onDoubleClick={event => this.editHandler(event, cur.id)}
               >
                 <p>{cur.name}</p>
                 <p>{cur.age}</p>
                 <p>{cur.email}</p>
               </div>
-              <form action="submit" style={edit} onDoubleClick={this.editHandler}>
-                <input
-                  type="text"
-                  onChange={this.changeHandler}
-                  placeholder={cur.name}
-                  value={this.props.name}
-                />
-                <input
-                  type="age"
-                  onChange={this.changeHandler}
-                  placeholder={cur.age}
-                  value={this.props.age}
-                />
-                <input
-                  onDoubleClick={this.editHandler}
-                  type="email"
-                  onChange={this.changeHandler}
-                  placeholder={cur.email}
-                  value={this.props.email}
-                />
-              </form>
-            </>
-          );
-        })}
+            );
+          })}
       </>
     );
   }
