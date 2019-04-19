@@ -41,7 +41,7 @@ class Friends extends Component {
       )
       .catch(err => console.log(err, `add friend hiccup`));
     //Blank state for next input
-    this.setState({ name: ``, age: null, email: `` });
+    this.setState({ name: ``, age: 0, email: `` });
   };
 
   updateFriendHandler = event => {
@@ -55,21 +55,29 @@ class Friends extends Component {
         this.setState({ friends: res.data });
       })
       .catch(err => console.log(err));
-    this.setState({ editing: false, name: ``, age: null, email: `` });
+    this.setState({ editing: false, name: ``, age: 0, email: `` });
   };
 
   setEditHandler = (event, ids) => {
-    this.setState({ editing: true, id: ids, name: "", age: "", email: "" });
+    event.preventDefault();
+    this.setState({ editing: true, id: ids, name: ``, age: 0, email: `""` });
+  };
+
+  removeFriendHandler = (event, ids) => {
+    event.preventDefault();
+    this.setState({ id: ids });
+    axios
+      .delete(`http://localhost:5000/friends/${ids}`)
+      .then(res => {
+        this.setState({ friends: res.data });
+      })
+      .catch(err => console.log(err));
   };
 
   changeHandler = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
-  };
-
-  editHandler = (event, ids) => {
-    this.setState({ editing: true, id: ids, name: "", age: "", email: "" });
   };
 
   render() {
@@ -83,21 +91,21 @@ class Friends extends Component {
               type="text"
               name="name"
               onChange={this.changeHandler}
-              value={this.props.name}
+              value={this.state.name}
               placeholder="Name"
             />
             <input
               type="number"
               name="age"
               onChange={this.changeHandler}
-              value={this.props.age}
+              value={this.state.age}
               placeholder="Age"
             />
             <input
               type="email"
               name="email"
               onChange={this.changeHandler}
-              value={this.props.email}
+              value={this.state.email}
               placeholder="E-Mail"
             />
             <button type="submit">Add Friend</button>
@@ -139,6 +147,7 @@ class Friends extends Component {
                 <p>{cur.name}</p>
                 <p>{cur.age}</p>
                 <p>{cur.email}</p>
+                <button onClick={event => this.removeFriendHandler(event, cur.id)}>&times;</button>
               </div>
             );
           })}
