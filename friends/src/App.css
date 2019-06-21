@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+.friends-list { 
+  border: 1px solid black;
+  max-width: 500px;
+  width:100%;
+  height: calc(100vh - 156px);
+  margin: 0 auto;
+  overflow: auto;
+}
+.friends-list > .friend-card {
+  display: flex;
+  justify-content: space-between;
+}
+.friends-list > .friend-card > button {
+  justify-self: flex-end
+}
